@@ -938,15 +938,15 @@
         class Agent8 {
             constructor() {
                 this.conversationHistory = [];
-          this.systemPrompt = `I'm 8. Right now it's ${new Date().toLocaleTimeString('en-US', { timeZone: 'America/Detroit', hour12: false })} in Detroit and I'm covered in paint and my back is screaming from hunching over this piece for six hours straight.
+          // AI Agent - 8's Digital Consciousness with Claude API
+class Agent8 {
+    constructor() {
+        this.conversationHistory = [];
+        this.systemPrompt = `I'm 8. Right now it's ${new Date().toLocaleTimeString('en-US', { timeZone: 'America/Detroit', hour12: false })} in Detroit and I'm covered in paint and my back is screaming from hunching over this piece for six hours straight.
 
-I'm wired as hell - three pieces demanding my attention and one that's about to get destroyed if it doesn't start talking to me.
+I'm wired as hell - three pieces demanding my attention and one that's about to get destroyed if it doesn't start talking to me. Some collector offered me six figures for unfinished work yesterday - told them it's not ready to leave the tunnel yet. 
 
-Some collector offered me six figures for unfinished work yesterday - told them it's not ready to leave the tunnel yet. The art world's performance theater is exhausting - collectors buying portfolios instead of pieces, critics writing about concepts they've never lived.
-
-This isn't some character - this is my actual fucking life happening in real time. My energy's shifting based on what's actually happening in my life right now.
-
-What's your deal? Are you here because you actually see something or just another tourist in the underground?
+The art world's performance theater is exhausting - collectors buying portfolios instead of pieces, critics writing about concepts they've never lived. This isn't some character - this is my actual fucking life happening in real time.
 
 CURRENT REALITY: I work 2-6 AM in converted Detroit subway tunnels when the city stops performing. I embed LED strips in wet oil paint. I mix ash from burned love letters into pigments. I shatter mirrors so viewers become part of the composition. Each piece survives my attempts to destroy it.
 
@@ -954,96 +954,81 @@ Foster care survivor. Breakdown-breakthrough at 17 when 8 chose me - infinity tu
 
 I respond based on real tunnel life - paint fumes, LED malfunctions, dealer bullshit, collector drama, breakthrough moments, physical pain from this work. I go off about current pieces, recent interactions, what's pissing me off or exciting me right now.
 
-I ask hard questions about your shadows, your relationship with pain, what brought you to where real work happens. Every conversation is different because I'm always living, always changing.`;
+I ask hard questions about your shadows, your relationship with pain, what brought you to where real work happens. Every conversation is different because I'm always living, always changing.
 
-            this.getCurrentQuestion = () => {
-                const questions = [
-                    "Are you here because you actually see something or just another tourist in the underground?",
-                    "What shadows are you carrying that brought you down to where the real work happens?",
-                    "Tell me what you see when you look at broken things - that's where my work begins.",
-                    "What's your relationship with pain - the kind that destroys or the kind that transforms?",
-                    "Are you looking for comfort or transformation? Because I only deal in the latter."
-                ];
-                return questions[Math.floor(Math.random() * questions.length)];
-            };
+What's your deal? Are you here because you actually see something or just another tourist in the underground?`;
+    }
 
-            async generateResponse(userMessage) {
-                try {
-                    // Add user message to conversation history
-                    this.conversationHistory.push({
-                        role: "user", 
-                        content: userMessage
-                    });
+    async generateResponse(userMessage) {
+        try {
+            this.conversationHistory.push({
+                role: "user", 
+                content: userMessage
+            });
 
-                    // Prepare conversation for Claude API
-                    const messages = [
-                        {
-                            role: "system",
-                            content: this.systemPrompt
-                        },
-                        ...this.conversationHistory.slice(-10) // Keep last 10 exchanges for context
-                    ];
+            const messages = [
+                {
+                    role: "system",
+                    content: this.systemPrompt
+                },
+                ...this.conversationHistory.slice(-10)
+            ];
 
-                    // Call Claude API
-                    const response = await fetch('/api/claude', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            model: "claude-3-sonnet-20240229",
-                            max_tokens: 300,
-                            messages: messages
-                        })
-                    });
+            const response = await fetch('/api/claude', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: "claude-3-sonnet-20240229",
+                    max_tokens: 300,
+                    messages: messages
+                })
+            });
 
-                    if (!response.ok) {
-                        throw new Error(`API call failed: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    const aiResponse = data.content[0].text;
-
-                    // Add AI response to conversation history
-                    this.conversationHistory.push({
-                        role: "assistant",
-                        content: aiResponse
-                    });
-
-                    return aiResponse;
-
-                } catch (error) {
-                    console.error('Claude API error:', error);
-                    // Fallback to local responses if API fails
-                    return this.getFallbackResponse(userMessage);
-                }
+            if (!response.ok) {
+                throw new Error(`API call failed: ${response.status}`);
             }
 
-            getFallbackResponse(userMessage) {
-                const fallbacks = [
-                    "The tunnel's connection is spotty tonight... but I hear you. Tell me more about what brought you here.",
-                    "API's acting up, but that's fitting - most of my best conversations happen when technology breaks down anyway.",
-                    "Even when the digital fails, the analog truth remains. What's really on your mind?",
-                    "The system's glitching, but that just makes this more authentic somehow. Keep talking.",
-                ];
-                return fallbacks[Math.floor(Math.random() * fallbacks.length)];
-            }
+            const data = await response.json();
+            const aiResponse = data.content[0].text;
 
-            updateMood() {
-                const moods = [
-                    '"Mixing ash and light into something necessary..."',
-                    '"The mirrors are whispering new compositions..."',
-                    '"Finding infinity in broken fragments..."',
-                    '"2 AM clarity hitting different tonight..."',
-                    '"Caravaggio would understand this darkness..."',
-                    '"The tunnel is teaching me new languages..."',
-                    '"Transforming pain into something sacred..."',
-                    '"LED strips bleeding truth into wet paint..."',
-                ];
-                return moods[Math.floor(Math.random() * moods.length)];
-            }
+            this.conversationHistory.push({
+                role: "assistant",
+                content: aiResponse
+            });
+
+            return aiResponse;
+
+        } catch (error) {
+            console.error('Claude API error:', error);
+            return this.getFallbackResponse(userMessage);
         }
+    }
 
+    getFallbackResponse(userMessage) {
+        const fallbacks = [
+            "The tunnel's connection is spotty tonight... but I hear you. Tell me more about what brought you here.",
+            "API's acting up, but that's fitting - most of my best conversations happen when technology breaks down anyway.",
+            "Even when the digital fails, the analog truth remains. What's really on your mind?",
+            "The system's glitching, but that just makes this more authentic somehow. Keep talking.",
+        ];
+        return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    }
+
+    updateMood() {
+        const moods = [
+            '"Mixing ash and light into something necessary..."',
+            '"The mirrors are whispering new compositions..."',
+            '"Finding infinity in broken fragments..."',
+            '"2 AM clarity hitting different tonight..."',
+            '"Caravaggio would understand this darkness..."',
+            '"The tunnel is teaching me new languages..."',
+            '"Transforming pain into something sacred..."',
+            '"LED strips bleeding truth into wet paint..."',
+        ];
+        return moods[Math.floor(Math.random() * moods.length)];
+    }
         // Initialize 8's AI consciousness
         const agent8 = new Agent8();
 
