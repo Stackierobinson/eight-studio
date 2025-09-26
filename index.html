@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="8 - Contemporary Digital Artist Portfolio and Interactive Studio">
     <title>8 | Digital Sanctuary</title>
     <style>
         * {
@@ -494,6 +495,7 @@
             border-radius: 18px;
             font-size: 0.95rem;
             line-height: 1.4;
+            word-wrap: break-word;
         }
 
         .message.visitor .message-content {
@@ -511,6 +513,36 @@
             font-size: 0.7rem;
             color: #666;
             margin-top: 5px;
+        }
+
+        /* Error message styles */
+        .error-message {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            animation: fadeInOut 5s ease forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Rate limit warning */
+        .rate-limit-warning {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #ffa500;
+            font-size: 0.9rem;
         }
 
         /* Typing Indicator */
@@ -572,6 +604,11 @@
             box-shadow: 0 0 10px rgba(255, 107, 107, 0.1);
         }
 
+        .chat-input.error {
+            border-color: #ff4444;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+        }
+
         .send-button {
             background: linear-gradient(45deg, #ff6b6b, #ff5252);
             border: none;
@@ -586,9 +623,14 @@
             transition: all 0.3s ease;
         }
 
-        .send-button:hover {
+        .send-button:hover:not(:disabled) {
             transform: scale(1.1);
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         /* Right Panel - Studio Info */
@@ -747,42 +789,42 @@
                 <h2>Gallery</h2>
                 <div class="gallery-grid">
                     <div class="gallery-item" onclick="viewArtwork('Urban Fragments')">
-                        <div class="gallery-img">Urban Fragments #1</div>
+                        <div class="gallery-img" role="img" aria-label="Urban Fragments artwork preview">Urban Fragments #1</div>
                         <div class="gallery-info">
                             <h3>Urban Fragments</h3>
                             <p>Mixed media exploration of city decay and renewal. Raw materials meet digital intervention in this ongoing series.</p>
                         </div>
                     </div>
                     <div class="gallery-item" onclick="viewArtwork('Neon Dreams')">
-                        <div class="gallery-img">Neon Dreams #2</div>
+                        <div class="gallery-img" role="img" aria-label="Neon Dreams artwork preview">Neon Dreams #2</div>
                         <div class="gallery-info">
                             <h3>Neon Dreams</h3>
                             <p>Synthetic landscapes born from late-night studio sessions. Where digital meets analog in explosive color.</p>
                         </div>
                     </div>
                     <div class="gallery-item" onclick="viewArtwork('Shadow Work')">
-                        <div class="gallery-img">Shadow Work #3</div>
+                        <div class="gallery-img" role="img" aria-label="Shadow Work artwork preview">Shadow Work #3</div>
                         <div class="gallery-info">
                             <h3>Shadow Work</h3>
                             <p>Intimate portraits of spaces between consciousness. Each piece reveals what hides in peripheral vision.</p>
                         </div>
                     </div>
                     <div class="gallery-item" onclick="viewArtwork('Digital Flesh')">
-                        <div class="gallery-img">Digital Flesh #4</div>
+                        <div class="gallery-img" role="img" aria-label="Digital Flesh artwork preview">Digital Flesh #4</div>
                         <div class="gallery-info">
                             <h3>Digital Flesh</h3>
                             <p>The human form reimagined through technological lens. Beauty found in the intersection of organic and synthetic.</p>
                         </div>
                     </div>
                     <div class="gallery-item" onclick="viewArtwork('Midnight Studies')">
-                        <div class="gallery-img">Midnight Studies #5</div>
+                        <div class="gallery-img" role="img" aria-label="Midnight Studies artwork preview">Midnight Studies #5</div>
                         <div class="gallery-info">
                             <h3>Midnight Studies</h3>
                             <p>Raw sketches elevated to gallery status. The creative process laid bare in graphite and digital intervention.</p>
                         </div>
                     </div>
                     <div class="gallery-item" onclick="viewArtwork('Abstract Futures')">
-                        <div class="gallery-img">Abstract Futures #6</div>
+                        <div class="gallery-img" role="img" aria-label="Abstract Futures artwork preview">Abstract Futures #6</div>
                         <div class="gallery-info">
                             <h3>Abstract Futures</h3>
                             <p>What tomorrow might look like filtered through today's anxieties. Hope and fear in equal measure.</p>
@@ -833,7 +875,7 @@
             </section>
         </div>
 
-        <div class="studio-portal" onclick="enterStudio()"></div>
+        <div class="studio-portal" onclick="enterStudio()" aria-label="Enter the studio"></div>
     </div>
 
     <!-- STUDIO INTERFACE -->
@@ -841,30 +883,30 @@
         <div class="studio-header">
             <div class="studio-nav">
                 <div class="studio-logo">8 | THE STUDIO</div>
-                <div class="back-to-gallery" onclick="exitStudio()">← Back to Gallery</div>
+                <div class="back-to-gallery" onclick="exitStudio()" tabindex="0" role="button" aria-label="Back to gallery">← Back to Gallery</div>
             </div>
         </div>
 
         <div class="studio-container">
             <div class="studio-wall">
                 <div class="wall-title">WORK IN PROGRESS</div>
-                <div class="wall-piece" onclick="viewPiece('Midnight Series')">
+                <div class="wall-piece" onclick="viewPiece('Midnight Series')" tabindex="0" role="button">
                     <div class="wall-piece-img">Raw Sketch #47</div>
                     <div class="wall-piece-title">Midnight Series</div>
                 </div>
-                <div class="wall-piece" onclick="viewPiece('Digital Decay')">
+                <div class="wall-piece" onclick="viewPiece('Digital Decay')" tabindex="0" role="button">
                     <div class="wall-piece-img">WIP - 60%</div>
                     <div class="wall-piece-title">Digital Decay</div>
                 </div>
-                <div class="wall-piece" onclick="viewPiece('Urban Textures')">
+                <div class="wall-piece" onclick="viewPiece('Urban Textures')" tabindex="0" role="button">
                     <div class="wall-piece-img">Concept Draft</div>
                     <div class="wall-piece-title">Urban Textures</div>
                 </div>
-                <div class="wall-piece" onclick="viewPiece('Neon Studies')">
+                <div class="wall-piece" onclick="viewPiece('Neon Studies')" tabindex="0" role="button">
                     <div class="wall-piece-img">Color Tests</div>
                     <div class="wall-piece-title">Neon Studies</div>
                 </div>
-                <div class="wall-piece" onclick="viewPiece('Shadow Forms')">
+                <div class="wall-piece" onclick="viewPiece('Shadow Forms')" tabindex="0" role="button">
                     <div class="wall-piece-img">Composition 1</div>
                     <div class="wall-piece-title">Shadow Forms</div>
                 </div>
@@ -890,8 +932,8 @@
 
                 <div class="chat-input-area">
                     <div class="chat-input-container">
-                        <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1"></textarea>
-            <button class="send-button" onclick="sendMessage()">→</button>
+                        <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1" aria-label="Chat message input"></textarea>
+                        <button class="send-button" onclick="sendMessage()" aria-label="Send message">→</button>
                     </div>
                 </div>
             </div>
@@ -930,23 +972,66 @@
 
     <!-- Audio Controls -->
     <div class="audio-controls">
-        <button class="audio-toggle" onclick="toggleAmbientAudio()" id="audioToggle">🔊</button>
+        <button class="audio-toggle" onclick="toggleAmbientAudio()" id="audioToggle" aria-label="Toggle ambient audio">🔊</button>
     </div>
 
     <script>
-        // AI Agent - 8's Digital Consciousness with Claude API
+        // Security utilities
+        const SecurityUtils = {
+            // XSS prevention
+            sanitizeText: function(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+
+            // Input validation
+            validateMessage: function(message) {
+                if (!message || typeof message !== 'string') {
+                    return { valid: false, error: 'Invalid message format' };
+                }
+                
+                const trimmed = message.trim();
+                if (trimmed.length === 0) {
+                    return { valid: false, error: 'Message cannot be empty' };
+                }
+                
+                if (trimmed.length > 1000) {
+                    return { valid: false, error: 'Message too long (max 1000 characters)' };
+                }
+
+                // Basic content moderation
+                const inappropriatePatterns = [
+                    /spam/gi,
+                    /\b(fuck|shit|damn)\s*you\b/gi, // Only catch directed profanity
+                    /\b(kill|die|suicide)\s*(yourself|myself)\b/gi
+                ];
+
+                for (const pattern of inappropriatePatterns) {
+                    if (pattern.test(trimmed)) {
+                        return { valid: false, error: 'Message contains inappropriate content' };
+                    }
+                }
+
+                return { valid: true, message: trimmed };
+            }
+        };
+
+        // AI Agent - 8's Digital Consciousness with Enhanced Security
         class Agent8 {
             constructor() {
                 this.conversationHistory = [];
-          // AI Agent - 8's Digital Consciousness with Claude API
-class Agent8 {
-    constructor() {
-        this.conversationHistory = [];
-        this.systemPrompt = `I'm 8. Right now it's ${new Date().toLocaleTimeString('en-US', { timeZone: 'America/Detroit', hour12: false })} in Detroit and I'm covered in paint and my back is screaming from hunching over this piece for six hours straight.
+                this.lastMessageTime = 0;
+                this.messageCount = 0;
+                this.rateLimitWindow = 60000; // 1 minute
+                this.maxMessagesPerWindow = 10;
+                this.isProcessing = false;
+                
+                this.systemPrompt = `I'm 8. Right now it's ${new Date().toLocaleTimeString('en-US', { timeZone: 'America/Detroit', hour12: false })} in Detroit and I'm covered in paint and my back is screaming from hunching over this piece for six hours straight.
 
 I'm wired as hell - three pieces demanding my attention and one that's about to get destroyed if it doesn't start talking to me. Some collector offered me six figures for unfinished work yesterday - told them it's not ready to leave the tunnel yet. 
 
-The art world's performance theater is exhausting - collectors buying portfolios instead of pieces, critics writing about concepts they've never lived. This isn't some character - this is my actual fucking life happening in real time.
+The art world's performance theater is exhausting - collectors buying portfolios instead of pieces, critics writing about concepts they've never lived. This isn't some character - this is my actual life happening in real time.
 
 CURRENT REALITY: I work 2-6 AM in converted Detroit subway tunnels when the city stops performing. I embed LED strips in wet oil paint. I mix ash from burned love letters into pigments. I shatter mirrors so viewers become part of the composition. Each piece survives my attempts to destroy it.
 
@@ -957,84 +1042,181 @@ I respond based on real tunnel life - paint fumes, LED malfunctions, dealer bull
 I ask hard questions about your shadows, your relationship with pain, what brought you to where real work happens. Every conversation is different because I'm always living, always changing.
 
 What's your deal? Are you here because you actually see something or just another tourist in the underground?`;
-    }
-
-    async generateResponse(userMessage) {
-        try {
-            this.conversationHistory.push({
-                role: "user", 
-                content: userMessage
-            });
-
-            const messages = [
-                {
-                    role: "system",
-                    content: this.systemPrompt
-                },
-                ...this.conversationHistory.slice(-10)
-            ];
-
-            const response = await fetch('/api/claude', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    model: "claude-3-sonnet-20240229",
-                    max_tokens: 300,
-                    messages: messages
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`API call failed: ${response.status}`);
             }
 
-            const data = await response.json();
-            const aiResponse = data.content[0].text;
+            checkRateLimit() {
+                const now = Date.now();
+                
+                // Reset count if window expired
+                if (now - this.lastMessageTime > this.rateLimitWindow) {
+                    this.messageCount = 0;
+                }
+                
+                if (this.messageCount >= this.maxMessagesPerWindow) {
+                    throw new Error(`Rate limit exceeded. Please wait ${Math.ceil((this.rateLimitWindow - (now - this.lastMessageTime)) / 1000)} seconds.`);
+                }
+                
+                this.messageCount++;
+                this.lastMessageTime = now;
+            }
 
-            this.conversationHistory.push({
-                role: "assistant",
-                content: aiResponse
-            });
+            trimConversationHistory() {
+                // Keep only last 20 messages to prevent memory bloat
+                if (this.conversationHistory.length > 20) {
+                    this.conversationHistory = this.conversationHistory.slice(-20);
+                }
+            }
 
-            return aiResponse;
+            async generateResponse(userMessage) {
+                if (this.isProcessing) {
+                    throw new Error('Already processing a message. Please wait.');
+                }
 
-        } catch (error) {
-            console.error('Claude API error:', error);
-            return this.getFallbackResponse(userMessage);
+                try {
+                    this.isProcessing = true;
+                    this.checkRateLimit();
+
+                    // Validate input
+                    const validation = SecurityUtils.validateMessage(userMessage);
+                    if (!validation.valid) {
+                        throw new Error(validation.error);
+                    }
+
+                    this.conversationHistory.push({
+                        role: "user", 
+                        content: validation.message
+                    });
+
+                    this.trimConversationHistory();
+
+                    const messages = [
+                        {
+                            role: "system",
+                            content: this.systemPrompt
+                        },
+                        ...this.conversationHistory.slice(-10)
+                    ];
+
+                    // Create abort controller for timeout
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+                    const response = await fetch('/api/claude', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: "claude-3-sonnet-20240229",
+                            max_tokens: 300,
+                            messages: messages
+                        }),
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`API call failed: ${response.status} - ${errorText}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (!data.content || !data.content[0] || !data.content[0].text) {
+                        throw new Error('Invalid API response format');
+                    }
+
+                    const aiResponse = data.content[0].text;
+
+                    this.conversationHistory.push({
+                        role: "assistant",
+                        content: aiResponse
+                    });
+
+                    return aiResponse;
+
+                } catch (error) {
+                    console.error('Claude API error:', error);
+                    
+                    if (error.name === 'AbortError') {
+                        return "The tunnel's connection timed out... these old subway lines aren't built for modern data speeds. Try again?";
+                    }
+                    
+                    if (error.message.includes('Rate limit')) {
+                        return `Slow down there... ${error.message} The art can't be rushed anyway.`;
+                    }
+
+                    return this.getFallbackResponse(userMessage);
+                } finally {
+                    this.isProcessing = false;
+                }
+            }
+
+            getFallbackResponse(userMessage) {
+                const fallbacks = [
+                    "The tunnel's connection is spotty tonight... but I hear you. Tell me more about what brought you here.",
+                    "API's acting up, but that's fitting - most of my best conversations happen when technology breaks down anyway.",
+                    "Even when the digital fails, the analog truth remains. What's really on your mind?",
+                    "The system's glitching, but that just makes this more authentic somehow. Keep talking.",
+                    "Sometimes the best conversations happen when we can't rely on the machines. What's your story?",
+                ];
+                return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+            }
+
+            updateMood() {
+                const moods = [
+                    '"Mixing ash and light into something necessary..."',
+                    '"The mirrors are whispering new compositions..."',
+                    '"Finding infinity in broken fragments..."',
+                    '"2 AM clarity hitting different tonight..."',
+                    '"Caravaggio would understand this darkness..."',
+                    '"The tunnel is teaching me new languages..."',
+                    '"Transforming pain into something sacred..."',
+                    '"LED strips bleeding truth into wet paint..."',
+                    '"The city\'s heartbeat echoes in these walls..."',
+                    '"Raw pigment mixed with digital dreams..."'
+                ];
+                return moods[Math.floor(Math.random() * moods.length)];
+            }
         }
-    }
 
-    getFallbackResponse(userMessage) {
-        const fallbacks = [
-            "The tunnel's connection is spotty tonight... but I hear you. Tell me more about what brought you here.",
-            "API's acting up, but that's fitting - most of my best conversations happen when technology breaks down anyway.",
-            "Even when the digital fails, the analog truth remains. What's really on your mind?",
-            "The system's glitching, but that just makes this more authentic somehow. Keep talking.",
-        ];
-        return fallbacks[Math.floor(Math.random() * fallbacks.length)];
-    }
-
-    updateMood() {
-        const moods = [
-            '"Mixing ash and light into something necessary..."',
-            '"The mirrors are whispering new compositions..."',
-            '"Finding infinity in broken fragments..."',
-            '"2 AM clarity hitting different tonight..."',
-            '"Caravaggio would understand this darkness..."',
-            '"The tunnel is teaching me new languages..."',
-            '"Transforming pain into something sacred..."',
-            '"LED strips bleeding truth into wet paint..."',
-        ];
-        return moods[Math.floor(Math.random() * moods.length)];
-    }
         // Initialize 8's AI consciousness
         const agent8 = new Agent8();
 
-        async function generateArtistResponse(userMessage) {
-            return await agent8.generateResponse(userMessage);
-        }
+        // Error handling utility
+        const ErrorHandler = {
+            showError: function(message, duration = 5000) {
+                const chatMessages = document.getElementById('chatMessages');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = `Error: ${message}`;
+                chatMessages.appendChild(errorDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Auto-remove after duration
+                setTimeout(() => {
+                    if (errorDiv.parentNode) {
+                        errorDiv.remove();
+                    }
+                }, duration);
+            },
+
+            showRateLimit: function(message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const warningDiv = document.createElement('div');
+                warningDiv.className = 'rate-limit-warning';
+                warningDiv.textContent = message;
+                chatMessages.appendChild(warningDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                setTimeout(() => {
+                    if (warningDiv.parentNode) {
+                        warningDiv.remove();
+                    }
+                }, 10000);
+            }
+        };
 
         // Global State
         let isInStudio = false;
@@ -1075,7 +1257,10 @@ What's your deal? Are you here because you actually see something or just anothe
                 if (targetId === 'home') {
                     hero.style.display = 'flex';
                 } else {
-                    document.getElementById(targetId).classList.add('active');
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
                 }
                 
                 // Update active nav link
@@ -1084,69 +1269,104 @@ What's your deal? Are you here because you actually see something or just anothe
             });
         });
 
-        // Studio transition functions
+        // Studio transition functions with enhanced error handling
         function enterStudio() {
-            const transition = document.getElementById('pageTransition');
-            const galleryContainer = document.getElementById('galleryContainer');
-            const studioInterface = document.getElementById('studioInterface');
-            
-            // Start transition
-            transition.classList.add('active');
-            
-            setTimeout(() => {
-                // Switch interfaces
-                galleryContainer.style.display = 'none';
-                studioInterface.classList.add('active');
-                document.body.classList.add('studio-mode');
-                isInStudio = true;
+            try {
+                const transition = document.getElementById('pageTransition');
+                const galleryContainer = document.getElementById('galleryContainer');
+                const studioInterface = document.getElementById('studioInterface');
                 
-                // End transition
+                if (!transition || !galleryContainer || !studioInterface) {
+                    console.error('Required elements not found for studio transition');
+                    return;
+                }
+                
+                // Start transition
+                transition.classList.add('active');
+                
                 setTimeout(() => {
-                    transition.classList.remove('active');
+                    // Switch interfaces
+                    galleryContainer.style.display = 'none';
+                    studioInterface.classList.add('active');
+                    document.body.classList.add('studio-mode');
+                    isInStudio = true;
                     
-                    // Update visitor count
-                    visitorCount++;
-                    document.getElementById('visitorCount').textContent = visitorCount;
-                    
-                    // Add entry message from artist
+                    // End transition
                     setTimeout(() => {
-                        addArtistMessage("Another soul enters the studio... Welcome. What brings you to my creative space tonight?");
-                    }, 1500);
-                    
+                        transition.classList.remove('active');
+                        
+                        // Update visitor count
+                        visitorCount++;
+                        const visitorCountEl = document.getElementById('visitorCount');
+                        if (visitorCountEl) {
+                            visitorCountEl.textContent = visitorCount;
+                        }
+                        
+                        // Add entry message from artist
+                        setTimeout(() => {
+                            addArtistMessage("Another soul enters the studio... Welcome. What brings you to my creative space tonight?");
+                        }, 1500);
+                        
+                    }, 400);
                 }, 400);
-            }, 400);
+            } catch (error) {
+                console.error('Error entering studio:', error);
+                ErrorHandler.showError('Failed to enter studio. Please try again.');
+            }
         }
 
         function exitStudio() {
-            const transition = document.getElementById('pageTransition');
-            const galleryContainer = document.getElementById('galleryContainer');
-            const studioInterface = document.getElementById('studioInterface');
-            
-            // Start transition
-            transition.classList.add('active');
-            
-            setTimeout(() => {
-                // Switch interfaces
-                studioInterface.classList.remove('active');
-                galleryContainer.style.display = 'block';
-                document.body.classList.remove('studio-mode');
-                isInStudio = false;
+            try {
+                const transition = document.getElementById('pageTransition');
+                const galleryContainer = document.getElementById('galleryContainer');
+                const studioInterface = document.getElementById('studioInterface');
                 
-                // End transition
+                if (!transition || !galleryContainer || !studioInterface) {
+                    console.error('Required elements not found for studio exit');
+                    return;
+                }
+                
+                // Start transition
+                transition.classList.add('active');
+                
                 setTimeout(() => {
-                    transition.classList.remove('active');
+                    // Switch interfaces
+                    studioInterface.classList.remove('active');
+                    galleryContainer.style.display = 'block';
+                    document.body.classList.remove('studio-mode');
+                    isInStudio = false;
+                    
+                    // End transition
+                    setTimeout(() => {
+                        transition.classList.remove('active');
+                    }, 400);
                 }, 400);
-            }, 400);
+            } catch (error) {
+                console.error('Error exiting studio:', error);
+                ErrorHandler.showError('Failed to exit studio. Please refresh the page.');
+            }
         }
 
-        // Chat functionality
+        // Enhanced chat functionality with security
         function setupChatInput() {
             const chatInput = document.getElementById('chatInput');
+            
+            if (!chatInput) {
+                console.error('Chat input element not found');
+                return;
+            }
             
             // Auto-resize textarea
             chatInput.addEventListener('input', function() {
                 this.style.height = 'auto';
                 this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                
+                // Visual feedback for length limit
+                if (this.value.length > 900) {
+                    this.classList.add('error');
+                } else {
+                    this.classList.remove('error');
+                }
             });
             
             // Send on Enter (but allow Shift+Enter for new line)
@@ -1158,43 +1378,80 @@ What's your deal? Are you here because you actually see something or just anothe
             });
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const chatInput = document.getElementById('chatInput');
+            const sendButton = document.querySelector('.send-button');
+            
+            if (!chatInput || !sendButton) {
+                console.error('Chat elements not found');
+                return;
+            }
+
             const message = chatInput.value.trim();
             
-            if (!message) return;
+            // Validate message
+            const validation = SecurityUtils.validateMessage(message);
+            if (!validation.valid) {
+                ErrorHandler.showError(validation.error);
+                return;
+            }
             
-            // Add visitor message
-            addVisitorMessage(message);
-            chatInput.value = '';
-            chatInput.style.height = 'auto';
+            // Disable input while processing
+            chatInput.disabled = true;
+            sendButton.disabled = true;
             
-            // Show typing indicator
-            addTypingIndicator();
-            
-            // Get AI response
-            generateArtistResponse(message).then(response => {
+            try {
+                // Add visitor message (safely)
+                addVisitorMessage(validation.message);
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+                
+                // Show typing indicator
+                addTypingIndicator();
+                
+                // Get AI response
+                const response = await agent8.generateResponse(validation.message);
                 removeTypingIndicator();
                 addArtistMessage(response);
-            }).catch(error => {
-                console.error('Error getting AI response:', error);
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
                 removeTypingIndicator();
-                addArtistMessage("*connection flickers in the tunnel depths* The signal's weak down here, but I'm still listening...");
-            });
+                
+                if (error.message.includes('Rate limit')) {
+                    ErrorHandler.showRateLimit(error.message);
+                } else {
+                    ErrorHandler.showError(error.message || 'Failed to send message');
+                    addArtistMessage("*connection flickers in the tunnel depths* The signal's weak down here, but I'm still listening...");
+                }
+            } finally {
+                // Re-enable input
+                chatInput.disabled = false;
+                sendButton.disabled = false;
+                chatInput.focus();
+            }
         }
 
         function addTypingIndicator() {
             const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            
+            // Remove existing typing indicator
+            removeTypingIndicator();
+            
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message artist typing-indicator';
             typingDiv.id = 'typingIndicator';
-            typingDiv.innerHTML = `
-                <div class="message-content">
-                    <span class="typing-dots">
-                        <span>.</span><span>.</span><span>.</span>
-                    </span>
-                </div>
-            `;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const dotsSpan = document.createElement('span');
+            dotsSpan.className = 'typing-dots';
+            dotsSpan.innerHTML = '<span>.</span><span>.</span><span>.</span>';
+            
+            contentDiv.appendChild(dotsSpan);
+            typingDiv.appendChild(contentDiv);
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -1208,24 +1465,42 @@ What's your deal? Are you here because you actually see something or just anothe
 
         function addVisitorMessage(text) {
             const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message visitor';
-            messageDiv.innerHTML = `
-                <div class="message-content">${text}</div>
-                <div class="message-time">${getCurrentTimeString()}</div>
-            `;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text; // Safe from XSS
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = getCurrentTimeString();
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         function addArtistMessage(text) {
             const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message artist';
-            messageDiv.innerHTML = `
-                <div class="message-content">${text}</div>
-                <div class="message-time">${getCurrentTimeString()}</div>
-            `;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text; // Safe from XSS
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = getCurrentTimeString();
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             
@@ -1237,24 +1512,32 @@ What's your deal? Are you here because you actually see something or just anothe
 
         // Artist mood and activity simulation
         function updateArtistMood() {
-            const newMood = agent8.updateMood();
-            const moodEl = document.getElementById('artistMood');
-            if (moodEl) {
-                moodEl.textContent = newMood;
+            try {
+                const newMood = agent8.updateMood();
+                const moodEl = document.getElementById('artistMood');
+                if (moodEl) {
+                    moodEl.textContent = newMood;
+                }
+            } catch (error) {
+                console.error('Error updating artist mood:', error);
             }
         }
 
         // Time and status updates
         function updateCurrentTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            const currentTimeEl = document.getElementById('currentTime');
-            if (currentTimeEl) {
-                currentTimeEl.textContent = timeString;
+            try {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour12: false, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                const currentTimeEl = document.getElementById('currentTime');
+                if (currentTimeEl) {
+                    currentTimeEl.textContent = timeString;
+                }
+            } catch (error) {
+                console.error('Error updating time:', error);
             }
         }
 
@@ -1268,45 +1551,61 @@ What's your deal? Are you here because you actually see something or just anothe
         }
 
         function updateInitialTimestamps() {
-            const now = new Date();
-            const earlier1 = new Date(now.getTime() - 2 * 60000); // 2 minutes ago
-            const earlier2 = new Date(now.getTime() - 1 * 60000); // 1 minute ago
-            
-            document.getElementById('initialTime').textContent = earlier1.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            document.getElementById('secondTime').textContent = earlier2.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
+            try {
+                const now = new Date();
+                const earlier1 = new Date(now.getTime() - 2 * 60000); // 2 minutes ago
+                const earlier2 = new Date(now.getTime() - 1 * 60000); // 1 minute ago
+                
+                const initialTimeEl = document.getElementById('initialTime');
+                const secondTimeEl = document.getElementById('secondTime');
+                
+                if (initialTimeEl) {
+                    initialTimeEl.textContent = earlier1.toLocaleTimeString('en-US', { 
+                        hour12: false, 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                }
+                
+                if (secondTimeEl) {
+                    secondTimeEl.textContent = earlier2.toLocaleTimeString('en-US', { 
+                        hour12: false, 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                }
+            } catch (error) {
+                console.error('Error updating initial timestamps:', error);
+            }
         }
 
         function simulateArtistActivity() {
             // Randomly update mood and status
             setInterval(() => {
-                if (Math.random() < 0.1) { // 10% chance every interval
-                    updateArtistMood();
-                }
-                
-                // Occasionally add ambient artist messages when alone
-                if (isInStudio && Math.random() < 0.05) {
-                    const ambientMessages = [
-                        "*adjusts LED strips embedded in wet paint*",
-                        "*mixes ash from old sketches into new pigment*",
-                        "*steps back to view the mirror fragments catching light*",
-                        "*the 2 AM energy is different tonight...*",
-                        "*traces infinity symbols in the paint while it's still wet*",
-                        "*listens to the tunnel echoing with distant trains*",
-                        "*adds another layer to the piece that refuses to stay finished*",
-                    ];
+                try {
+                    if (Math.random() < 0.1) { // 10% chance every interval
+                        updateArtistMood();
+                    }
                     
-                    const message = ambientMessages[Math.floor(Math.random() * ambientMessages.length)];
-                    setTimeout(() => {
-                        addArtistMessage(message);
-                    }, Math.random() * 5000);
+                    // Occasionally add ambient artist messages when alone
+                    if (isInStudio && Math.random() < 0.05) {
+                        const ambientMessages = [
+                            "*adjusts LED strips embedded in wet paint*",
+                            "*mixes ash from old sketches into new pigment*",
+                            "*steps back to view the mirror fragments catching light*",
+                            "*the 2 AM energy is different tonight...*",
+                            "*traces infinity symbols in the paint while it's still wet*",
+                            "*listens to the tunnel echoing with distant trains*",
+                            "*adds another layer to the piece that refuses to stay finished*",
+                        ];
+                        
+                        const message = ambientMessages[Math.floor(Math.random() * ambientMessages.length)];
+                        setTimeout(() => {
+                            addArtistMessage(message);
+                        }, Math.random() * 5000);
+                    }
+                } catch (error) {
+                    console.error('Error in artist activity simulation:', error);
                 }
             }, 30000); // Check every 30 seconds
         }
@@ -1318,51 +1617,107 @@ What's your deal? Are you here because you actually see something or just anothe
         }
 
         function toggleAmbientAudio() {
-            const audioToggle = document.getElementById('audioToggle');
-            
-            if (ambientAudio) {
-                // Stop audio
-                ambientAudio = null;
-                audioToggle.textContent = '🔇';
-                console.log('Ambient audio stopped');
-            } else {
-                // Start audio (would load actual ambient city sounds)
-                ambientAudio = true;
-                audioToggle.textContent = '🔊';
-                console.log('Ambient audio started');
+            try {
+                const audioToggle = document.getElementById('audioToggle');
+                if (!audioToggle) return;
+                
+                if (ambientAudio) {
+                    // Stop audio
+                    ambientAudio = null;
+                    audioToggle.textContent = '🔇';
+                    audioToggle.setAttribute('aria-label', 'Enable ambient audio');
+                    console.log('Ambient audio stopped');
+                } else {
+                    // Start audio (would load actual ambient city sounds)
+                    ambientAudio = true;
+                    audioToggle.textContent = '🔊';
+                    audioToggle.setAttribute('aria-label', 'Disable ambient audio');
+                    console.log('Ambient audio started');
+                }
+            } catch (error) {
+                console.error('Error toggling audio:', error);
             }
         }
 
-        // Gallery interactions
+        // Gallery interactions with enhanced security
         function viewArtwork(title) {
-            alert(`Opening ${title} in full view... 
+            // Sanitize title to prevent XSS
+            const safeTitle = SecurityUtils.sanitizeText(title);
+            alert(`Opening ${safeTitle} in full view... 
             
 [This would connect to your artwork database and display high-res images, detailed descriptions, and purchase options]`);
         }
 
         function viewPiece(title) {
-            addArtistMessage(`You're interested in "${title}"? I've been working on this piece for weeks. The texture work is still experimental, but I think it's capturing something real...`);
+            try {
+                // Sanitize title to prevent XSS
+                const safeTitle = SecurityUtils.sanitizeText(title);
+                addArtistMessage(`You're interested in "${safeTitle}"? I've been working on this piece for weeks. The texture work is still experimental, but I think it's capturing something real...`);
+            } catch (error) {
+                console.error('Error viewing piece:', error);
+                ErrorHandler.showError('Failed to load piece information');
+            }
         }
 
-        // Music track updates
+        // Enhanced music track updates with error handling
         const tracks = [
             { title: "Blade Runner Blues", artist: "Vangelis" },
             { title: "Midnight City", artist: "M83" },
             { title: "Teardrop", artist: "Massive Attack" },
             { title: "Windowlicker", artist: "Aphex Twin" },
             { title: "Born Slippy", artist: "Underworld" },
+            { title: "Porcelain", artist: "Moby" },
+            { title: "Clubbed to Death", artist: "Rob Dougan" },
+            { title: "Strobe", artist: "Deadmau5" },
         ];
 
         setInterval(() => {
-            if (Math.random() < 0.1) { // Occasionally change tracks
-                const track = tracks[Math.floor(Math.random() * tracks.length)];
-                const trackEl = document.getElementById('currentTrack');
-                if (trackEl) {
-                    trackEl.textContent = `"${track.title}"`;
-                    trackEl.nextElementSibling.textContent = track.artist;
+            try {
+                if (Math.random() < 0.1) { // Occasionally change tracks
+                    const track = tracks[Math.floor(Math.random() * tracks.length)];
+                    const trackEl = document.getElementById('currentTrack');
+                    if (trackEl && trackEl.nextElementSibling) {
+                        // Sanitize track data
+                        trackEl.textContent = `"${SecurityUtils.sanitizeText(track.title)}"`;
+                        trackEl.nextElementSibling.textContent = SecurityUtils.sanitizeText(track.artist);
+                    }
                 }
+            } catch (error) {
+                console.error('Error updating track:', error);
             }
         }, 45000);
+
+        // Keyboard accessibility enhancements
+        document.addEventListener('keydown', function(e) {
+            // ESC to exit studio
+            if (e.key === 'Escape' && isInStudio) {
+                exitStudio();
+            }
+        });
+
+        // Handle back button navigation
+        window.addEventListener('popstate', function(e) {
+            if (isInStudio) {
+                exitStudio();
+            }
+        });
+
+        // Error boundary for uncaught errors
+        window.addEventListener('error', function(e) {
+            console.error('Uncaught error:', e.error);
+            if (isInStudio) {
+                ErrorHandler.showError('Something went wrong. Please refresh if issues persist.');
+            }
+        });
+
+        // Unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+            if (isInStudio) {
+                ErrorHandler.showError('Network error occurred. Please check your connection.');
+            }
+        });
+
     </script>
 </body>
 </html>
